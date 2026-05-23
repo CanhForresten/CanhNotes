@@ -25,11 +25,15 @@ public final class CanhNotesViewModel: ObservableObject {
 
     private let repository: DrawingDataRepository
 
-    public init(repository: DrawingDataRepository = LocalDrawingDataRepository()) {
+    public init(repository: DrawingDataRepository) {
         self.repository = repository
         self.currentDrawingData = PKDrawing().dataRepresentation()
         self.activeTool = .pen
         self.currentFileName = "page-\(UUID().uuidString).bin"
+    }
+
+    public convenience init() {
+        self.init(repository: LocalDrawingDataRepository())
     }
 
     public func selectTool(_ selection: ToolSelection) {
@@ -81,7 +85,7 @@ public final class CanhNotesViewModel: ObservableObject {
         do {
             return try PKDrawing(data: currentDrawingData)
         } catch {
-            lastErrorMessage = "Drawing data could not be opened: \(error.localizedDescription)"
+            lastErrorMessage = "Drawing data could not be parsed: \(error.localizedDescription)"
             return PKDrawing()
         }
     }

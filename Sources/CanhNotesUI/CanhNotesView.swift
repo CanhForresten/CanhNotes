@@ -2,9 +2,11 @@
 import SwiftUI
 
 public struct CanhNotesView: View {
-    @StateObject private var viewModel = CanhNotesViewModel()
+    @StateObject private var viewModel: CanhNotesViewModel
 
-    public init() {}
+    public init(viewModel: CanhNotesViewModel = CanhNotesViewModel()) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     public var body: some View {
         VStack(spacing: 0) {

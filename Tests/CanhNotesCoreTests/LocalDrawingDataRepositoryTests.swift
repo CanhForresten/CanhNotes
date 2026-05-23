@@ -33,10 +33,12 @@ final class LocalDrawingDataRepositoryTests: XCTestCase {
         let data = Data([0x01, 0x02, 0x03])
         defer { try? repository.delete(fileName: fileName) }
 
-        _ = try repository.save(data: data, fileName: fileName)
+        let savedURL = try repository.save(data: data, fileName: fileName)
         let loaded = try repository.load(fileName: fileName)
+        let documentsDirectoryPath = try repository.documentsDirectoryURL().path
 
         XCTAssertEqual(loaded, data)
+        XCTAssertTrue(savedURL.path.hasPrefix(documentsDirectoryPath))
     }
 
     func testDeleteRemovesFile() throws {
