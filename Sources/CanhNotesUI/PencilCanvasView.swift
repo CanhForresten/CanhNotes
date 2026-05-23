@@ -15,7 +15,7 @@ public struct PencilCanvasView: UIViewRepresentable {
         canvasView.drawingPolicy = .anyInput
         canvasView.tool = viewModel.currentCanvasTool()
         canvasView.backgroundColor = .systemBackground
-        canvasView.drawing = (try? PKDrawing(data: viewModel.currentDrawingData)) ?? PKDrawing()
+        canvasView.drawing = viewModel.makeDrawingForCanvas()
         return canvasView
     }
 

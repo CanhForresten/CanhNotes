@@ -17,6 +17,7 @@ public final class CanhNotesViewModel: ObservableObject {
     @Published public private(set) var activeTool: ToolSelection
     @Published public private(set) var lastErrorMessage: String?
     @Published public private(set) var lastSavedURL: URL?
+    @Published public var currentFileName: String
 
     public var penInk = PKInkingTool(.pen, color: .label, width: 3)
     public var highlighterInk = PKInkingTool(.marker, color: .systemYellow.withAlphaComponent(0.45), width: 10)
@@ -28,6 +29,7 @@ public final class CanhNotesViewModel: ObservableObject {
         self.repository = repository
         self.currentDrawingData = PKDrawing().dataRepresentation()
         self.activeTool = .pen
+        self.currentFileName = "page-\(UUID().uuidString).bin"
     }
 
     public func selectTool(_ selection: ToolSelection) {
@@ -73,6 +75,15 @@ public final class CanhNotesViewModel: ObservableObject {
 
     public func load(fileName: String) throws {
         currentDrawingData = try repository.load(fileName: fileName)
+    }
+
+    public func makeDrawingForCanvas() -> PKDrawing {
+        do {
+            return try PKDrawing(data: currentDrawingData)
+        } catch {
+            lastErrorMessage = "Drawing data could not be opened."
+            return PKDrawing()
+        }
     }
 }
 #endif

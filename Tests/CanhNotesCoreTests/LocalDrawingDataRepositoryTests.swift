@@ -25,4 +25,28 @@ final class LocalDrawingDataRepositoryTests: XCTestCase {
             XCTAssertEqual(error as? DrawingDataRepositoryError, .fileNotFound)
         }
     }
+
+    func testSaveAndLoadByFileNameUsesDocumentsDirectory() throws {
+        let repository = LocalDrawingDataRepository(fileManager: .default)
+        let fileName = "test-\(UUID().uuidString).bin"
+        let data = Data([0x01, 0x02, 0x03])
+        defer { try? repository.delete(fileName: fileName) }
+
+        _ = try repository.save(data: data, fileName: fileName)
+        let loaded = try repository.load(fileName: fileName)
+
+        XCTAssertEqual(loaded, data)
+    }
+
+    func testDeleteRemovesFile() throws {
+        let repository = LocalDrawingDataRepository(fileManager: .default)
+        let fileName = "delete-\(UUID().uuidString).bin"
+        _ = try repository.save(data: Data([0x05]), fileName: fileName)
+
+        try repository.delete(fileName: fileName)
+
+        XCTAssertThrowsError(try repository.load(fileName: fileName)) { error in
+            XCTAssertEqual(error as? DrawingDataRepositoryError, .fileNotFound)
+        }
+    }
 }

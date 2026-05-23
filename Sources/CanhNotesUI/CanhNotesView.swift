@@ -27,7 +27,7 @@ public struct CanhNotesView: View {
                 .buttonStyle(.bordered)
 
                 Button("Save") {
-                    viewModel.save(fileName: "DefaultPage")
+                    viewModel.save(fileName: viewModel.currentFileName)
                 }
                 .buttonStyle(.bordered)
             }
