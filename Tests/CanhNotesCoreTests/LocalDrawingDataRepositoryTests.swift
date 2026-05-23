@@ -5,6 +5,7 @@ final class LocalDrawingDataRepositoryTests: XCTestCase {
     func testSaveThenLoadRoundTrip() throws {
         let fileManager = FileManager.default
         let root = fileManager.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        defer { try? fileManager.removeItem(at: root) }
         try fileManager.createDirectory(at: root, withIntermediateDirectories: true)
 
         let repository = LocalDrawingDataRepository(fileManager: fileManager)

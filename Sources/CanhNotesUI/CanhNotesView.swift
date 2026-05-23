@@ -35,7 +35,7 @@ public struct CanhNotesView: View {
             .background(.ultraThinMaterial)
 
             if let lastErrorMessage = viewModel.lastErrorMessage {
-                Text("Save failed: \(lastErrorMessage)")
+                Text("Error: \(lastErrorMessage)")
                     .font(.footnote)
                     .foregroundStyle(.red)
                     .padding(.horizontal)

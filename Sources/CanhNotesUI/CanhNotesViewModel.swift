@@ -17,7 +17,7 @@ public final class CanhNotesViewModel: ObservableObject {
     @Published public private(set) var activeTool: ToolSelection
     @Published public private(set) var lastErrorMessage: String?
     @Published public private(set) var lastSavedURL: URL?
-    @Published public var currentFileName: String
+    @Published public private(set) var currentFileName: String
 
     public var penInk = PKInkingTool(.pen, color: .label, width: 3)
     public var highlighterInk = PKInkingTool(.marker, color: .systemYellow.withAlphaComponent(0.45), width: 10)
@@ -81,7 +81,7 @@ public final class CanhNotesViewModel: ObservableObject {
         do {
             return try PKDrawing(data: currentDrawingData)
         } catch {
-            lastErrorMessage = "Drawing data could not be opened."
+            lastErrorMessage = "Drawing data could not be opened: \(error.localizedDescription)"
             return PKDrawing()
         }
     }
