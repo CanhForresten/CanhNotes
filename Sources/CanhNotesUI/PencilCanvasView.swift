@@ -35,13 +35,12 @@ public struct PencilCanvasView: UIViewRepresentable {
         }
 
         public func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {
-            viewModel.handleCanvasDrawingDidChange(
+            let didRestoreInkTool = viewModel.handleCanvasDrawingDidChange(
                 canvasView.drawing,
                 gestureState: canvasView.drawingGestureRecognizer.state
             )
 
-            if canvasView.drawingGestureRecognizer.state == .ended,
-               viewModel.activeTool == .pen || viewModel.activeTool == .highlighter {
+            if didRestoreInkTool {
                 canvasView.tool = viewModel.currentCanvasTool()
             }
         }

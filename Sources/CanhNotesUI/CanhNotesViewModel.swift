@@ -15,6 +15,8 @@ public final class CanhNotesViewModel: ObservableObject {
 
     @Published public var currentDrawingData: Data
     @Published public private(set) var activeTool: ToolSelection
+    @Published public private(set) var lastErrorMessage: String?
+    @Published public private(set) var lastSavedURL: URL?
 
     public var penInk = PKInkingTool(.pen, color: .label, width: 3)
     public var highlighterInk = PKInkingTool(.marker, color: .systemYellow.withAlphaComponent(0.45), width: 10)
@@ -48,18 +50,25 @@ public final class CanhNotesViewModel: ObservableObject {
         }
     }
 
-    public func handleCanvasDrawingDidChange(_ drawing: PKDrawing, gestureState: UIGestureRecognizer.State) {
+    @discardableResult
+    public func handleCanvasDrawingDidChange(_ drawing: PKDrawing, gestureState: UIGestureRecognizer.State) -> Bool {
         currentDrawingData = drawing.dataRepresentation()
 
         guard activeTool == .vectorEraser, gestureState == .ended else {
-            return
+            return false
         }
 
         activeTool = previousInkTool
+        return true
     }
 
-    public func save(fileName: String) throws {
-        _ = try repository.save(data: currentDrawingData, fileName: fileName)
+    public func save(fileName: String) {
+        do {
+            lastSavedURL = try repository.save(data: currentDrawingData, fileName: fileName)
+            lastErrorMessage = nil
+        } catch {
+            lastErrorMessage = error.localizedDescription
+        }
     }
 
     public func load(fileName: String) throws {

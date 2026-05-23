@@ -27,12 +27,20 @@ public struct CanhNotesView: View {
                 .buttonStyle(.bordered)
 
                 Button("Save") {
-                    try? viewModel.save(fileName: "DefaultPage")
+                    viewModel.save(fileName: "DefaultPage")
                 }
                 .buttonStyle(.bordered)
             }
             .padding()
             .background(.ultraThinMaterial)
+
+            if let lastErrorMessage = viewModel.lastErrorMessage {
+                Text("Save failed: \(lastErrorMessage)")
+                    .font(.footnote)
+                    .foregroundStyle(.red)
+                    .padding(.horizontal)
+                    .padding(.bottom, 8)
+            }
         }
     }
 }
